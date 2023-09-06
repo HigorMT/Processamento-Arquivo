@@ -1,0 +1,133 @@
+<p-dialog [(visible)]="inProgress" [style]="{width: '400px', 'align-text': 'center'}" [draggable]="false"
+          [closable]="false"
+          [modal]="true" class="p-fluid justify-content-center align-content-center">
+  <ng-template pTemplate="header">
+    <div class="mt-0 mx-auto mb-5 block ">
+      <h4 class="mb-0">
+        Importando Arquivos...
+      </h4>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="body">
+    <div style="text-align: center; justify-content: center">
+      <span style="margin-top: -10px">
+        <p-progressSpinner></p-progressSpinner>
+      </span>
+
+      <div class="mt-1">
+        <p-progressBar [value]="progress" [showValue]="true"></p-progressBar>
+        Arquivos Processados: {{processedArchive}}/{{selectedFiles.length}}
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+<div class="grid p-fluid">
+  <!--  <div class="col-12 field" style="text-align: center">-->
+  <!--    <h3>Tela de Importação de Arquivos .XML</h3>-->
+  <!--  </div>-->
+
+  <div *ngIf="!hasResulted" class="col-12 field">
+    <p-fileUpload #form class="p-button-text p-button-text" mode="advanced"
+                  chooseLabel="Buscar Arquivo" (onSelect)="onSelectFile($event)"
+                  invalidFileTypeMessageSummary="Tipo de arquivo inválido"
+                  invalidFileTypeMessageDetail="Tipos permitidos: xml" [accept]="accept"
+                  invalidFileSizeMessageSummary="Tamanho máximo de arquivo ultrapassado"
+                  chooseIcon="pi pi-search" [customUpload]="true" [maxFileSize]="30000000"
+                  [multiple]="true" (onRemove)="showContent = true" [auto]="false"
+                  [showUploadButton]="false" [showCancelButton]="false">
+      <ng-template pTemplate="toolbar">
+        <button pButton pRipple class="p-button-info mr-2" label="Processar Arquivo"
+                icon="pi pi-upload" (click)="onUpload()" [disabled]="selectedFiles.length === 0"></button>
+        <button pButton pRipple class="p-button-info mr-2" label="Cancelar"
+                icon="pi pi-times" (click)="onClearFile()"></button>
+      </ng-template>
+      <ng-template pTemplate="content">
+        <div *ngIf="showContent" style="text-align: center">
+          <p><h4><b>Selecione um Arquivo XML...</b></h4>
+          <div style="display: flex; justify-content: center">
+            <h5 class="text-disabled">Ou arraste ela para cá.&nbsp;
+              <a href="./assets/data/Arquivo_Exemplo.xml" style="text-decoration: none" target="_blank">Se desejar, faça o download
+                do arquivo de exemplo.</a></h5>
+          </div>
+        </div>
+      </ng-template>
+    </p-fileUpload>
+  </div>
+
+  <div *ngIf="processamentos.length > 0 && hasResulted" class="col-12 field">
+    <div class="card">
+      <div style="width: 100%; justify-content: right; text-align: right">
+        <button style="max-width: 8rem" pButton pRipple label="Importar" class="p-button-info" icon="pi pi-file"
+                (click)="resetResult()">
+        </button>
+      </div>
+
+      <div class="card mt-2" [style]="{background: '#6A6A6A6B'}">
+        <p-tabView>
+          <p-tabPanel *ngFor="let processamento of processamentos" [header]="processamento?.nomeArquivo!!">
+            <div class="card" >
+              <p-table [value]="processamento.agentes" [scrollable]="true" scrollHeight="500px"
+                     styleClass="p-datatable-striped" dataKey="id">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 50px; max-width: 50px"></th>
+                  <th>ID</th>
+                  <th>Código</th>
+                  <th>Data</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-agente let-expanded="expanded">
+                <tr>
+                  <td style="width: 50px; max-width: 50px">
+                    <button type="button" pButton pRipple [pRowToggler]="agente"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                  </td>
+                  <td>{{agente?.id ?? ''}}</td>
+                  <td>{{agente?.codigo ?? ''}}</td>
+                  <td>{{agente?.data ?? ''}}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="rowexpansion" let-agente>
+                <tr>
+                  <td colspan="7" style="width: 100%">
+                    <div class="p-3" style="width: 100%">
+                      <p-table [value]="agente.detalhes" [scrollHeight]="(processamentos.length === 0 ? '' : '300px')"
+                               [scrollable]="true">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th>ID</th>
+                            <th>Região</th>
+                            <th>Compra</th>
+                            <th>Geração</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-agente let-expanded="expanded">
+                          <tr>
+                            <td>{{agente?.id ?? ''}}</td>
+                            <td>{{agente.regiao ?? ''}}</td>
+                            <td>{{agente?.detalhesCompra[0]?.valor ?? ''}}</td>
+                            <td>{{agente?.detalhesGeracao[0]?.valor ?? ''}}</td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="7" style="text-align: center; justify-content: center">Nenhum Dado Recuperado.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+            </div>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+  </div>
+
+</div>

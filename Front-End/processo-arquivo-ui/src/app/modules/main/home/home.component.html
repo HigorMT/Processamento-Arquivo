@@ -1,0 +1,180 @@
+<div class="grid p-fluid">
+  <div class="col-12 field" style="text-align: center">
+    <h2>Dados das Importações de Arquivos</h2>
+  </div>
+
+  <div class="col-12 field" style="margin-top: 169px">
+
+    <div class="grid p-fluid">
+
+      <div class="xl:col-1 lg:col-1 md:col-offset-0 sm:col-offset-0"></div>
+
+      <div class="xl:col-5 lg:col-5 md:col-6 sm:col-12">
+        <flip-card #flipCard_1 >
+          <div front-body>
+            <div class="grid p-fluid">
+              <div class="col-12" style="text-align: right">
+                <span>
+                  <i class="pi pi-info-circle" (click)="flipCard_1.flip(true)"
+                     style="margin-right: 20px; margin-top: 21px; transform: scale(1.2);"
+                     [pTooltip]="'Visualizar Dados'"></i>
+                </span>
+              </div>
+              <div class="col-12" style="text-align: center">
+                <span class="Fs50">
+                  Arquivos Processados
+                </span>
+              </div>
+              <div class="col-12" style="margin-top: 41px; text-align: center">
+               <span class="Fs90 font-bold">
+                  {{info?.arquivosProcessados | number:'.0-0' : 'pt-BR'}}
+               </span>
+              </div>
+            </div>
+          </div>
+          <div back-body>
+            <div class="grid p-fluid">
+              <div class="col-12" style="text-align: right">
+                <span style="margin-top: 10px;">
+                  <i class="pi pi-info-circle" (click)="flipCard_1.flip(false)"
+                     style="margin-right: 20px; margin-top: 21px; transform: scale(1.2);"></i>
+                </span>
+              </div>
+              <div class="col-12" style="text-align: center">
+                <div class="card" style="margin-top: 42px">
+                  <p-table [value]="arquivos" scrollHeight="296px" [scrollable]="true" styleClass="p-datatable-striped"
+                  selectionMode="single" (selectionChange)="agentes = $event">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>ID</th>
+                        <th>Nome Arquivo</th>
+                        <th>Data Processamento</th>
+                        <th>Nº Agentes</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-arquivo>
+                      <tr [pSelectableRow]="arquivo.agentes">
+                        <td>{{arquivo.id}}</td>
+                        <td>{{arquivo.nomeArquivo}}</td>
+                        <td>{{arquivo.dataProcessamento}}</td>
+                        <td>{{arquivo?.agentes?.length ?? 0}}</td>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                      <tr>
+                        <td colspan="4" style="text-align: center">
+                         Nenhum Arquivo Processado
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </flip-card>
+      </div>
+
+      <div class="xl:col-5 lg:col-5 md:col-6 sm:col-12">
+        <flip-card #flipCard_2 >
+          <div front-body>
+            <div class="grid p-fluid">
+              <div class="col-12" style="text-align: right">
+                <span>
+                  <i class="pi pi-info-circle" (click)="flipCard_2.flip(true)"
+                     style="margin-right: 20px; margin-top: 21px; transform: scale(1.2);"
+                     [pTooltip]="'Visualizar Dados'"></i>
+                </span>
+              </div>
+              <div class="col-12" style="text-align: center">
+                <span class="Fs50">
+                  Agentes Processados
+                </span>
+              </div>
+              <div class="col-12" style="margin-top: 41px; text-align: center">
+               <span class="Fs90 font-bold">
+                  {{info?.agentesProcessados | number:'.0-0' : 'pt-BR'}}
+               </span>
+              </div>
+            </div>
+          </div>
+          <div back-body>
+            <div class="grid p-fluid">
+              <div class="col-12" style="text-align: right">
+                <span style="margin-top: 10px;">
+                  <i class="pi pi-info-circle" (click)="flipCard_2.flip(false)"
+                     style="margin-right: 20px; margin-top: 21px; transform: scale(1.2);"></i>
+                </span>
+              </div>
+              <div class="col-12" style="text-align: center">
+                <div class="card" style="margin-top: 42px">
+                  <p-table [value]="agentes" scrollHeight="296px" [scrollable]="true" dataKey="id" styleClass="p-datatable-striped">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th style="width: 50px; max-width: 50px"></th>
+                        <th>ID</th>
+                        <th>Código</th>
+                        <th>Data</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-agente let-expanded="expanded">
+                      <tr>
+                        <td style="width: 50px; max-width: 50px">
+                          <button type="button" pButton pRipple [pRowToggler]="agente"
+                                  class="p-button-text p-button-rounded p-button-plain"
+                                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td>{{agente.id}}</td>
+                        <td>{{agente.codigo}}</td>
+                        <td>{{agente.data}}</td>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-agente>
+                      <tr>
+                        <td colspan="7" style="width: 100%">
+                          <div class="p-3" style="width: 100%">
+                            <p-table [value]="agente.detalhes" [scrollHeight]="(arquivos.length === 0 ? '' : '300px')"
+                                     [scrollable]="true">
+                              <ng-template pTemplate="header">
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Região</th>
+                                  <th>Compra</th>
+                                  <th>Geração</th>
+                                </tr>
+                              </ng-template>
+                              <ng-template pTemplate="body" let-agente let-expanded="expanded">
+                                <tr>
+                                  <td>{{agente?.id ?? ''}}</td>
+                                  <td>{{agente.regiao ?? ''}}</td>
+                                  <td>{{agente?.detalhesCompra[0]?.valor ?? ''}}</td>
+                                  <td>{{agente?.detalhesGeracao[0]?.valor ?? ''}}</td>
+                                </tr>
+                              </ng-template>
+                            </p-table>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                      <tr>
+                        <td colspan="4" style="text-align: center">
+                          Nenhum Agente Processado
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </flip-card>
+      </div>
+
+      <div class="xl:col-1 lg:col-1 md:col-offset-0 sm:col-offset-0"></div>
+
+    </div>
+
+  </div>
+
+</div>

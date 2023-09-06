@@ -1,0 +1,74 @@
+$cardColor: #6A6A6A6B;
+
+.flip-card {
+  background-color: transparent;
+  display: block;
+  flex-direction: column;
+  width: 100%;
+  height: 490px;
+  border: 1px solid #000000;
+  perspective: 1000px;
+  border-radius: 20px;
+}
+
+.card-icon {
+  margin-right: 20px;
+  margin-top: 21px;
+  transform: scale(1.2);
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card-inner {
+  transform: rotateX(180deg);
+}
+
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: block;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform-style: flat;
+}
+
+.flip-card-front {
+  background-color: $cardColor;
+  color: #ffffff;
+}
+
+.flip-card-back {
+  background-color: $cardColor;
+  color: #ffffff;
+  transform: rotateX(180deg);
+}
+
+.rotate-front {
+  background-color: #DEDEDE6B;
+  transform: rotateX(0deg);
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.rotate-back {
+  background-color: #DEDEDE6B;
+  transform: rotateX(180deg);
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flat {
+  transform-style: flat;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
