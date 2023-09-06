@@ -1,0 +1,16 @@
+<div class="grid p-fluid">
+    <div class="col-12 field">
+        <div class="flip-card card" [class]="class">
+            <div class="flip-card-inner" [class]="style">
+                <div *ngIf="!this.rotate" class="flip-card-front">
+                    <ng-content select="[front-body]"></ng-content>
+                </div>
+                <div *ngIf="this.rotate" class="flip-card-back">
+                    <ng-content select="[back-body]"></ng-content>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
